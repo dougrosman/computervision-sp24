@@ -9,10 +9,10 @@ function gotFaceMesh(results) {
 }
 
 const holistic = new Holistic({locateFile: (file) => {
-  console.log(`https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`)
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+  console.log(`models/${file}`)
+  return `models/${file}`;
 }});
-faceMesh.setOptions({
+holistic.setOptions({
   modelComplexity: 1,
   smoothLandmarks: true,
   enableSegmentation: true,
@@ -21,7 +21,7 @@ faceMesh.setOptions({
   minDetectionConfidence: 0.5,
   minTrackingConfidence: 0.5
 });
-faceMesh.onResults(gotFaceMesh);
+holistic.onResults(gotFaceMesh);
 
 const camera = new Camera(videoElement, {
   onFrame: async () => {
