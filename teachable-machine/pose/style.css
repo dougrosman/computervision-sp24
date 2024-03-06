@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+}
+
+canvas, video {
+    display: block;
+    position: absolute;
+
+}
+
+canvas {
+    z-index: 1;
+}
+
+video {
+    transform: scaleX(-1);
+}
