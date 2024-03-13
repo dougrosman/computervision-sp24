@@ -1,0 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+canvas, video {
+    display: block;
+    position: absolute;
+}
+
+canvas {
+    /* place the canvas on top of the video */
+    z-index: 1;
+}
+
+video {
+    /* mirror the webcam */
+    transform: scaleX(-1);
+}

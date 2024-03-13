@@ -1,97 +1,80 @@
-const modelURL = 'model/';
-// the json file (model topology) has a reference to the bin file (model weights)
-const checkpointURL = modelURL + "model.json";
-// the metatadata json file contains the text labels of your model and additional information
-const metadataURL = modelURL + "metadata.json";
+// paste the url of the model you trained in teachablemachine here
+let URL = "https://teachablemachine.withgoogle.com/models/kBXK62B00/";
+let modelURL = URL + "model.json";
+let metadataURL = URL + "metadata.json";
 
-let myModel;
-let totalClasses;
-let myCanvas;
-
-let classification = "None Yet";
-let probability = "100";
-let poser;
-let video;
+let model, webcam, ctx, labelContainer, sortedPrediction, maxPredictions, pose, posenetOutput;
 
 const cam_w = 640;
 const cam_h = 480;
 
-
-// A function that loads the yM from the checkpoint
-async function load() {
-  myModel = await tmPose.load(checkpointURL, metadataURL);
-  totalClasses = myModel.getTotalClasses();
-  console.log("Number of classes, ", totalClasses);
-}
-
-
 async function setup() {
-  myCanvas = createCanvas(cam_w, cam_h);
-  // Call the load function, wait until it finishes loading
-  // videoCanvas = createCanvas(320, 240)
+  // load the model and metadata
+  // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+  // Note: the pose library adds 'tmPose' object to your window (window.tmPose)
+  model = await tmPose.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
+  document.getElementById("status").innerHTML = "Setting up camera";
 
-  await load();
-  video = createCapture(VIDEO, videoReady);
-  video.size(cam_w, cam_h);
-  //video.hide();
+  // Convenience function to setup a webcam
 
+  const flip = true; // whether to flip the webcam
+  webcam = new tmPose.Webcam(cam_w, cam_h, flip); // width, height, flip
+  await webcam.setup(); // request access to the webcam
+  await webcam.play();
+  window.requestAnimationFrame(loop1);
+
+  // append/get elements to the DOM
+  const canvas = document.getElementById("canvas");
+  canvas.width = cam_w;
+  canvas.height = cam_h;
+  ctx = canvas.getContext("2d");
+  createCanvas(cam_w, cam_h);
+  
+  document.getElementById("status").innerHTML = "Ready";
 }
+
 
 function draw() {
   clear();
-  //if(video) image(video,0,0);
-  fill(255,0,0)
-  textSize(18);
-  text("Result:" + classification, 10, 40);
-
-  text("Probability:" + probability, 10, 20)
-
-  textSize(8);
-  if (poser) { //did we get a skeleton yet;
-    for (var i = 0; i < poser.length; i++) {
-      let x = poser[i].position.x;
-      let y = poser[i].position.y;
-      ellipse(x, y, 5, 5);
-      text(poser[i].part, x + 4, y);
-    }
+  // ellipse(width / 2, height / 2, 200, 200);
+  
+  if(sortedPrediction) {
+    // do stuff with the predictions
+    textSize(100)
+    textAlign(CENTER)
+    text(sortedPrediction[0].className, width/2, height/2)
   }
 
+  if (pose) {
+    pose.keypoints.forEach((keypoint) => {
+      // console.log(keypoint);
+      ellipse(keypoint.position.x, keypoint.position.y, 10, 10);
+    });
+  }
 }
 
-function videoReady() {
-  console.log("Video Ready");
-  predict();
+async function loop1(timestamp) {
+  webcam.update(); // update the webcam frame
+  pose = await predict();
+  window.requestAnimationFrame(loop1);
 }
-
 
 async function predict() {
   // Prediction #1: run input through posenet
-  // predict can take in an image, video or canvas html element
-  const flipHorizontal = true;
+  // estimatePose can take in an image, video or canvas html element
+  const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+  // Prediction 2: run input through teachable machine classification model
+  const prediction = await model.predict(posenetOutput);
+  sortedPrediction = prediction.sort((a, b) => -a.probability + b.probability);
+  //console.log(prediction)
 
-  const {
-    pose,
-    posenetOutput
-  } = await myModel.estimatePose(
-    video.elt, //webcam.canvas,
-    flipHorizontal
-  );
-  // Prediction 2: run input through teachable machine assification model
-  const prediction = await myModel.predict(
-    posenetOutput,
-    flipHorizontal,
-    totalClasses
-  );
+  drawVideo()
+  return pose;
+}
 
-  // console.log(prediction);
-  
-  // Sort prediction array by probability
-  // So the first classname will have the highest probability
-  const sortedPrediction = prediction.sort((a, b) => -a.probability + b.probability);
-
-  //communicate these values back to draw function with global variables
-  classification = sortedPrediction[0].className;
-  probability = sortedPrediction[0].probability.toFixed(2);
-  if (pose) poser = pose.keypoints; // is there a skeleton
-  predict();
+function drawVideo() {
+  if (webcam.canvas) {
+    ctx.drawImage(webcam.canvas, 0, 0);
+  }
 }

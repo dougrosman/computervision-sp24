@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="lib/tf.min.js"></script>
-    <script src="lib/teachablemachine-pose.min.js"></script>
-    <script src="lib/p5.min.js"></script>
-    <script src="detections.js" defer></script>
-    <script src="sketch.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-    <title>Teachable Machine - Pose</title>
-</head>
-<body>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <title>PoseNet example using p5.js</title>
+  </head>
+  <body>
     
-</body>
+    <p id='status'>Loading model...</p>
+    <div><canvas id='canvas'></canvas></div>
+    <script src="sketch.js"></script>
+  </body>
 </html>

@@ -2,7 +2,8 @@
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
 
     // the link to your model provided by Teachable Machine export panel
-    const URL = "https://teachablemachine.withgoogle.com/models/iNb947Vwj/";
+    // const URL = "https://teachablemachine.withgoogle.com/models/iNb947Vwj/";
+    const URL = "model/"
     let model, webcam, ctx, labelContainer, maxPredictions;
 
     async function init() {
@@ -16,9 +17,10 @@
         maxPredictions = model.getTotalClasses();
 
         // Convenience function to setup a webcam
-        const size = 200;
+        const cam_w = 640;
+        const cam_h = 480
         const flip = true; // whether to flip the webcam
-        webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+        webcam = new tmPose.Webcam(cam_w, cam_h, flip); // width, height, flip
         await webcam.setup(); // request access to the webcam
         await webcam.play();
         window.requestAnimationFrame(loop);

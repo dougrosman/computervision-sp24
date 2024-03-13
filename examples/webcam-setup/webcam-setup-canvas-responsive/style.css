@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    width: 100%;
+}
+
+canvas, video {
+    display: block;
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover;
+    
+    /*
+    object-fit determines how the canvas and video should scale to fit the screen
+    
+    object-fit: cover; (fill the screen, crop automatically)
+    object-fit: contain; (fill the width of the screen, maintaining aspect ratio, showing full video and canvas);
+    */
+
+    
+}
+
+canvas {
+    /* place the canvas on top of the video */
+    z-index: 1;
+}
+
+video {
+    /* mirror the webcam */
+    transform: scaleX(-1);
+}

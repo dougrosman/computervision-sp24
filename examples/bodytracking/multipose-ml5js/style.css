@@ -1,0 +1,10 @@
+* {margin: 0; padding: 0; box-sizing: border-box;}
+
+canvas, video {
+    display: block;
+    position: absolute;
+}
+
+video {
+    transform: scaleX(-1);
+}

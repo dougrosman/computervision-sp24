@@ -1,0 +1,3 @@
+# Hands
+
+Note: a note about z (or, the depth). So, depth is not measuring distance from screen. rather, z is a relative measure of where your digit keypoints are relative to your palm. The palm is always set to z = 0, and the other keypoints z values range from -1 to 1 (although in reality this is usually between -0.5 and 0.5. Negative keypoint values indicate that a keypoint is IN FRONT OF the palm relative to the screen. Positive keypoint values, by contrast, indicate that a keypoint is BEHIND the palm relative to the screen). This is helpful for determining hand position I guess, but if you want to see how close or far a hand is from the screen, you'd need to either calculate the distance between two keypoints, or use some depth sensing tricks.

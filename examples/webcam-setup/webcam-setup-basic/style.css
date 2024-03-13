@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+video {
+    display: block;
+
+    /* mirror the webcam */
+    transform: scaleX(-1);
+}
