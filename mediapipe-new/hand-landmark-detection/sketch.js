@@ -9,7 +9,6 @@ subscribeToResults((results) => {
 let sketch = function (p) {
   p.setup = function () {
     p.createCanvas(w, h);
-    p.background(255, 0, 0);
     p.colorMode(p.HSB);
   };
 
@@ -23,7 +22,7 @@ let sketch = function (p) {
         let currentHand = hands.landmarks[i];
         const hue = p.map(i, 0, hands.landmarks.length, 0, 360);
         p.stroke(hue, 100, 100);
-        p.strokeWeight(3);
+        p.strokeWeight(6);
         p.beginShape(p.POINTS);
         // loop through landmarks;
         for (let j = 0; j < currentHand.length; j++) {

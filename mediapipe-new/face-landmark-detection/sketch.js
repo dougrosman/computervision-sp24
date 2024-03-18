@@ -9,7 +9,6 @@ subscribeToResults((results) => {
 let sketch = function (p) {
   p.setup = function () {
     p.createCanvas(w, h);
-    p.background(255, 0, 0);
     p.colorMode(p.HSB);
   };
 
