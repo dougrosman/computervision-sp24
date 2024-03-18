@@ -3,9 +3,9 @@
 
 import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
 
-const { HandLandmarker, FilesetResolver } = vision;
+const { GestureRecognizer, FilesetResolver, DrawingUtils } = vision;
 
-let handLandmarker;
+let gestureRecognizer;
 let results;
 let runningMode = "VIDEO";
 let observers = [];
@@ -15,15 +15,17 @@ const h = 360;
 
 async function createHandLandmarker() {
   const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
-  handLandmarker = await HandLandmarker.createFromOptions(filesetResolver, {
+  gestureRecognizer = await GestureRecognizer.createFromOptions(filesetResolver, {
     baseOptions: {
-      modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+      modelAssetPath: `https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task`,
       delegate: "GPU",
     },
     numHands: 4,
     minHandDetectionConfidence: 0.5,
     minHandPresenceConfidence: 0.5,
     minHandTrackingConfidence: 0.5,
+    canned_gestures_classifier_options: -1,
+    custom_gestures_classifier_options: 0,
     runningMode,
   });
 
@@ -44,8 +46,8 @@ if (!hasGetUserMedia()) {
 
 // Enable the live webcam view and start detection.
 function enableCam() {
-  if (!handLandmarker) {
-    console.log("Wait! handLandmarker not loaded yet.");
+  if (!gestureRecognizer) {
+    console.log("Wait! gestureRecognizer not loaded yet.");
     return;
   }
 
@@ -77,7 +79,7 @@ async function predictWebcam() {
   let startTimeMs = performance.now();
   if (lastVideoTime !== video.currentTime) {
     lastVideoTime = video.currentTime;
-    results = handLandmarker.detectForVideo(video, startTimeMs);
+    results = gestureRecognizer.recognizeForVideo(video, startTimeMs);
   }
   if (results.landmarks) {
     notifyObservers(results);
