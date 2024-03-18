@@ -200,6 +200,7 @@ function enableCam(event) {
 let lastVideoTime = -1;
 let results = undefined;
 const drawingUtils = new DrawingUtils(canvasCtx);
+
 async function predictWebcam() {
   const radio = video.videoHeight / video.videoWidth;
   video.style.width = videoWidth + "px";
