@@ -1,4 +1,5 @@
 // https://developers.google.com/mediapipe/solutions/vision/face_landmarker/web_js
+// original demo: https://codepen.io/mediapipe-preview/pen/OJBVQJm?editors=1111
 
 import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
 
