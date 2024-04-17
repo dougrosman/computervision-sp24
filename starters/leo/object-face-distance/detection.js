@@ -33,9 +33,10 @@ async function createFaceObjectDetector() {
       modelAssetPath: `https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite`,
       delegate: "GPU",
     },
-    maxResults: 10, // set to -1 to grab all results 
-    scoreThreshold: 0.1,
+    maxResults: 1, // set to -1 to grab all results 
+    scoreThreshold: 0.05,
     runningMode: runningMode,
+    categoryAllowlist: ["toothbrush"],
   });
 
   faceDetector = await FaceDetector.createFromOptions(filesetResolver, {

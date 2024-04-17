@@ -27,11 +27,11 @@ async function createObjectDetector() {
       delegate: "GPU",
     },
     maxResults: -1, // set to -1 to grab all results 
-    scoreThreshold: 0.5,
+    scoreThreshold: .5,
     runningMode: runningMode,
   });
 
-  // option_var_1_web_js
+  console.log(objectDetector)
   enableCam();
 }
 
