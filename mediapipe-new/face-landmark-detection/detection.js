@@ -12,9 +12,15 @@ let observers = [];
 
 const w = 640;
 const h = 360;
+video.style.width = w + "px";
+video.style.height = h + "px";
+video.setAttribute("width", w);
+video.setAttribute("height", h);
 
 async function createFaceLandmarker() {
-  const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
+  const filesetResolver = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+  );
   faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
     baseOptions: {
       modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
@@ -71,11 +77,6 @@ results = undefined;
 // const drawingUtils = new DrawingUtils(canvasCtx);
 
 async function predictWebcam() {
-  video.style.width = w + "px";
-  video.style.height = h + "px";
-  video.setAttribute("width", w);
-  video.setAttribute("height", h);
-
   let startTimeMs = performance.now();
   if (lastVideoTime !== video.currentTime) {
     lastVideoTime = video.currentTime;

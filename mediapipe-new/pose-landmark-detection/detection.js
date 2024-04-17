@@ -12,6 +12,10 @@ let observers = [];
 
 const w = 640;
 const h = 360;
+video.style.width = w + "px";
+video.style.height = h + "px";
+video.setAttribute("width", w);
+video.setAttribute("height", h);
 
 async function createPoseLandmarker() {
   const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
@@ -70,10 +74,6 @@ results = undefined;
 // const drawingUtils = new DrawingUtils(canvasCtx);
 
 async function predictWebcam() {
-  video.style.width = w + "px";
-  video.style.height = h + "px";
-  video.setAttribute("width", w);
-  video.setAttribute("height", h);
 
   let startTimeMs = performance.now();
   if (lastVideoTime !== video.currentTime) {

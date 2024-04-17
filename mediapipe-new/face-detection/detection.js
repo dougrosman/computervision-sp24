@@ -12,9 +12,15 @@ let observers = [];
 
 const w = 640;
 const h = 360;
+video.style.width = w + "px";
+video.style.height = h + "px";
+video.setAttribute("width", w);
+video.setAttribute("height", h);
 
 async function createFaceDetector() {
-  const filesetResolver = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
+  const filesetResolver = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+  );
   faceDetector = await FaceDetector.createFromOptions(filesetResolver, {
     baseOptions: {
       modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite`,
@@ -65,26 +71,17 @@ function enableCam() {
 
 let lastVideoTime = -1;
 results = undefined;
-// const drawingUtils = new DrawingUtils(canvasCtx);
 
 async function predictWebcam() {
-  video.style.width = w + "px";
-  video.style.height = h + "px";
-  video.setAttribute("width", w);
-  video.setAttribute("height", h);
-
   let startTimeMs = performance.now();
   if (lastVideoTime !== video.currentTime) {
     lastVideoTime = video.currentTime;
     results = faceDetector.detectForVideo(video, startTimeMs);
-    
-  
-  if (results.detections.length > 0) {
-    notifyObservers(results);
-    console.log("ok", results)
-    
+
+    if (results.detections.length > 0) {
+      notifyObservers(results);
+    }
   }
-}
 
   // Call this function again to keep predicting when the browser is ready.
 
