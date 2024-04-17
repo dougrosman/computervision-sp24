@@ -4,6 +4,7 @@ let objects;
 let faces;
 subscribeToResults((results) => {
 
+  // results contains object and face detections. You can tell which type of detection the current result is based on the lenght of the keypoints array (only the faces have keypoints)
   if(results.detections[0].keypoints.length == 6) {
     faces = results;
   } else {

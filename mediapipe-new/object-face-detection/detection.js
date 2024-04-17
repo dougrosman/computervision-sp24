@@ -48,12 +48,10 @@ async function createFaceObjectDetector() {
     runningMode: runningMode,
   });
 
-  // option_var_1_web_js
   enableCam();
 }
 
 createFaceObjectDetector();
-// createFaceDetector();
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {

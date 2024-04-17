@@ -8,15 +8,14 @@
 
 import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
 
-const { ObjectDetector, FilesetResolver, ObjectDetectionResult } = vision;
+const { ObjectDetector, FaceDetector, FilesetResolver, ObjectDetectionResult } = vision;
 
 let objectDetector;
 let faceDetector;
 let objectResults;
 let faceResults;
 let runningMode = "VIDEO";
-let faceObservers = [];
-let objectObservers = [];
+let observers = [];
 
 const w = 640;
 const h = 360;
@@ -25,7 +24,7 @@ video.style.height = h + "px";
 video.setAttribute("width", w);
 video.setAttribute("height", h);
 
-async function createObjectDetector() {
+async function createFaceObjectDetector() {
   const filesetResolver = await FilesetResolver.forVisionTasks(
     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
   );
@@ -34,8 +33,8 @@ async function createObjectDetector() {
       modelAssetPath: `https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite`,
       delegate: "GPU",
     },
-    maxResults: -1, // set to -1 to grab all results 
-    scoreThreshold: 0.5,
+    maxResults: 10, // set to -1 to grab all results 
+    scoreThreshold: 0.1,
     runningMode: runningMode,
   });
 
@@ -49,12 +48,10 @@ async function createObjectDetector() {
     runningMode: runningMode,
   });
 
-  // option_var_1_web_js
   enableCam();
 }
 
-createObjectDetector();
-createFaceDetector();
+createFaceObjectDetector();
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -89,7 +86,8 @@ function enableCam() {
 }
 
 let lastVideoTime = -1;
-results = undefined;
+faceResults = undefined;
+objectResults = undefined;
 
 async function predictWebcam() {
   let startTimeMs = performance.now();
@@ -99,24 +97,25 @@ async function predictWebcam() {
     faceResults = faceDetector.detectForVideo(video, startTimeMs);
 
     if (faceResults.detections.length > 0) {
-      notifyFaceObservers(faceResults);
+      notifyObservers(faceResults);
+      //console.log("faces",faceResults)
     }
+
     if (objectResults.detections.length > 0) {
-      notifyObjectObservers(objectResults);
+      notifyObservers(objectResults);
+      //console.log("objects",objectResults)
     }
   }
 
   // Call this function again to keep predicting when the browser is ready.
+
   window.requestAnimationFrame(predictWebcam);
 }
 
 // Function to notify all observers about new results
-function notifyFaceObservers(newResults) {
-  faceObservers.forEach((observer) => observer(newResults));
-}
-
-function notifyObjectObservers(newResults) {
-  objectObservers.forEach((observer) => observer(newResults));
+function notifyObservers(newResults) {
+  observers.forEach((observer) => observer(newResults));
+  // console.log(observers.length)
 }
 
 // Allow other parts of the application to subscribe to results updates
