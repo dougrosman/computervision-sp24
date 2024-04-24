@@ -35,7 +35,8 @@ let sketch = function (p) {
                 face.keypoints[j].y * p.height)
           p.stroke(180, 100, 100);
           p.strokeWeight(8)
-          p.point(keypoint.x, keypoint.y);
+          // p.point(keypoint.x, keypoint.y);
+          p.square(keypoint.x, keypoint.y, 20);
           p.noStroke()
           p.textAlign(p.CENTER)
           p.textSize(20)

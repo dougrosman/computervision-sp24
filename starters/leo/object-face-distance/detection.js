@@ -34,7 +34,7 @@ async function createFaceObjectDetector() {
       delegate: "GPU",
     },
     maxResults: 1, // set to -1 to grab all results 
-    scoreThreshold: 0.05,
+    scoreThreshold: 0.3,
     runningMode: runningMode,
     categoryAllowlist: ["toothbrush"],
   });
