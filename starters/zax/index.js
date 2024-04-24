@@ -3,11 +3,14 @@ let inputCanvas, outputContainer, statusMsg, transferBtn, sampleIndex = 0, model
 const inputImgs = [], outputImgs = [];
 
 const manhole_covers = pix2pix('./models/manhole_covers.pict', modelLoaded);
+let video;
 
 function setup() {
   // Create canvas
   inputCanvas = createCanvas(SIZE, SIZE);
   inputCanvas.class('border-box pencil').parent('canvasContainer');
+  video = createCapture(VIDEO)
+  video.size(320, 240);
 
   // Selcect output div container
   outputContainer = select('#output');
@@ -40,8 +43,12 @@ function setup() {
 
 // Draw on the canvas when mouse is pressed
 function draw() {
-  if (mouseIsPressed) {
-    line(mouseX, mouseY, pmouseX, pmouseY);
+  // if (mouseIsPressed) {
+  //   line(mouseX, mouseY, pmouseX, pmouseY);
+  // }
+  image(video, 0, 0);
+  if (modelReady && !isTransfering) {
+    transfer()
   }
 }
 
